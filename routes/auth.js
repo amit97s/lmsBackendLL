@@ -9,11 +9,32 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     console.log('Login attempt:', { email, password });
-    
+
+    // Hardcoded admin login
+    if (email === 'admin@admin.com' && password === 'admin@123') {
+      const payload = {
+        id: 'admin',
+        name: 'Admin',
+        role: 'admin',
+        email: 'admin@admin.com',
+      };
+      const token = jwt.sign(payload, process.env.JWT_SECRET || 'fallback_secret', { expiresIn: '1d' });
+      return res.status(200).json({
+        success: true,
+        token,
+        user: {
+          id: 'admin',
+          name: 'Admin',
+          email: 'admin@admin.com',
+          role: 'admin',
+        }
+      });
+    }
+
     // Try to find teacher first
     let user = await Teacher.findOne({ $or: [ { email }, { number: email } ] });
     console.log('Teacher found:', user ? 'Yes' : 'No');
-    
+
     if (user) {
       console.log('Teacher password check:', user.plainPassword, '===', password);
       if (user.plainPassword === password) {
@@ -41,11 +62,11 @@ router.post('/login', async (req, res) => {
         });
       }
     }
-    
+
     // Try to find student
     user = await Student.findOne({ $or: [ { email }, { number: email } ] });
     console.log('Student found:', user ? 'Yes' : 'No');
-    
+
     if (user) {
       console.log('Student password check:', user.plainPassword, '===', password);
       if (user.plainPassword === password) {
@@ -81,7 +102,7 @@ router.post('/login', async (req, res) => {
         });
       }
     }
-    
+
     return res.status(401).json({ success: false, message: 'Invalid email/phone or password' });
   } catch (error) {
     console.error('Login error:', error);
