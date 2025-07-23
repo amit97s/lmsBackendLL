@@ -535,7 +535,7 @@ const createClass = async (req, res) => {
       startDate,
       students: Array.isArray(studentIds) ? studentIds : [],
       duration: duration || 3,
-      frequency: frequency || 'Daily',
+      frequency: frequency || 'weekday',
       isRecurring: true
     });
     

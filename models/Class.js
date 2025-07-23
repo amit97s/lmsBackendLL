@@ -8,7 +8,7 @@ const classSchema = new mongoose.Schema({
   startDate: { type: String }, // or Date if you want strict date
   students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }],
   duration: { type: Number, default: 3 }, // duration in months
-  frequency: { type: String, enum: ['Daily', 'Weekly'], default: 'Daily' },
+  frequency: { type: String, enum: ['weekday', 'weekend'], default: 'weekday' },
   isRecurring: { type: Boolean, default: false }, // true for recurring class templates
   recurringId: { type: mongoose.Schema.Types.ObjectId, ref: 'Class' }, // reference to parent recurring class
 }, {
