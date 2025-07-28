@@ -17,9 +17,9 @@ exports.submitApplication = async (req, res) => {
       resume
     });
     await application.save();
-    res.status(201).json({ message: 'Application submitted successfully.' });
+    res.status(201).json({success: true, message: 'Application submitted successfully.' });
   } catch (err) {
-    res.status(500).json({ message: 'Server error', error: err.message });
+    res.status(500).json({ success: false, message: 'Server error', error: err.message });
   }
 };
 
